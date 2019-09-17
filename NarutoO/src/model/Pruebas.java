@@ -9,9 +9,7 @@ public class Pruebas {
 		a.ingresarPersonajeAlFinal("Cristian", "c","c", 5000, null); 
 		a.ingresarPersonajeAlFinal("Kilo", "d","d", 5000, null);
 		System.out.println(a.pintar());
-		a.darLista();
-		a.ordenarPorBurbuja();
-		a.agregarOrdenadosLista();
+		a.modificarNombrePersonaje("Jhon Jairo","Manuel");
 		System.out.println(a.pintar());
 		
 		

@@ -57,6 +57,10 @@ public class Personaje implements Comparable<Personaje>{
 	public void setAnterior(Personaje anterior) {
 		this.anterior = anterior;
 	}
+	
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
 
 	@Override
 	public String toString() {

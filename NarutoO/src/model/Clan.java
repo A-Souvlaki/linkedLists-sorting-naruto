@@ -1,7 +1,5 @@
 package model;
 
-import java.util.ArrayList;
-
 public class Clan {
 
 	private String nombreClan;
@@ -98,6 +96,18 @@ public class Clan {
 		anterior.setSiguiente(siguiente);
 		siguiente.setAnterior(anterior);
 	}
+	
+	public void modificarNombrePersonaje(String nombreActual,String nombreActualizar) {
+		Personaje actual = primero;
+		boolean cerrar = false;
+		while (actual != null && !cerrar) {
+			if(actual.getNombre().equals(nombreActual)) {
+				actual.setNombre(nombreActualizar);
+				cerrar = true;
+			}
+			actual = actual.getSiguiente();
+		}
+	}
 
 	public int contarElementos() {
 		int contador = 0;
@@ -108,39 +118,23 @@ public class Clan {
 		}
 		return contador;
 	}
-
-	public ArrayList<Personaje> darLista() {
-		ArrayList<Personaje> personajes = new ArrayList<Personaje>();
-		Personaje actual = primero;
-		while (actual != null) {
-			personajes.add(actual);
-			actual = actual.getSiguiente();
-		}
-		return personajes;
-	}
-
-	public ArrayList<Personaje> ordenarPorBurbuja() {
-		ArrayList<Personaje> p = darLista();
-		for (int i = 0; i < p.size(); i++) {
-			for (int j = 0; j < p.size() - 1 - i; j++) {
-				if (p.get(j).compareTo(p.get(j + 1)) > 0) {
-					Personaje temp = p.get(j);
-					p.set(j, p.get(j + 1));
-					p.set(j + 1, temp);
-				}
+	
+	public Personaje retornarPorPosicion(int pos) {
+		Personaje actual = primero,index = null;
+		int posicion = 0;
+		boolean cerrar = false;
+		while (actual != null && !cerrar) {
+			++posicion;
+			if(pos == posicion) {
+				index = actual;
+				cerrar = true;
 			}
 		}
-		return p;
+		return actual;
 	}
-
-	public void agregarOrdenadosLista() {
-		ArrayList<Personaje> ordenado = ordenarPorBurbuja();
-		primero = null;
-		ultimo = null;
-		for (int i = 0; i < ordenado.size(); i++) {
-			ingresarPersonajeAlFinal(ordenado.get(i).getNombre(), ordenado.get(i).getPersonalidad(),
-					ordenado.get(i).getFechaCreacion(), ordenado.get(i).getPoder(), ordenado.get(i).getTecnicaBase());
-		}
+	
+	public void insertarPorPosicion(int pos, Personaje p) {
+		
 	}
 
 	public String buscarSecuencialPorNombre(String nombre) {
@@ -153,12 +147,6 @@ public class Clan {
 			}
 			actual = actual.getSiguiente();
 		}
-		return msj;
-	}
-
-	public String buscarBinarioPorNombre(String nombre) {
-		String msj = "";
-
 		return msj;
 	}
 
