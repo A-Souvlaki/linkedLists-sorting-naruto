@@ -64,8 +64,8 @@ public class Personaje implements Comparable<Personaje>{
 
 	@Override
 	public String toString() {
-		return "Personaje [nombre=" + nombre + ", personalidad=" + personalidad + ", fechaCreacion=" + fechaCreacion
-				+ ", poder=" + poder + ", tecnicaBase=" + tecnicaBase + "]";
+		return "Personaje [nombre=" + String.format("%1$-13s",nombre) + " personalidad=" + String.format("%1$-13s",personalidad) + ", fechaCreacion=" + String.format("%1$-13s", fechaCreacion)
+				+ ", poder=" + String.format("%1$-13s", poder) + ", tecnicaBase=" + String.format("%1$-13s", tecnicaBase) + "]";
 	}
 
 	public void insertarAlFinal(String nombreTecnica, double factorDeInfluencia) {
@@ -144,6 +144,38 @@ public class Personaje implements Comparable<Personaje>{
 	@Override
 	public int compareTo(Personaje o) {
 		return nombre.compareTo(o.getNombre());
+	}
+	
+	public int contarElementos() {
+		int contador = 0;
+		Tecnica actual = tecnicaBase ;
+		while (actual != null) {
+			contador++;
+			actual = actual.getSiguiente();
+		}
+		return contador;
+	}
+	
+	public Tecnica retornarIndice(int pos) {
+		Tecnica actual = tecnicaBase;
+		for (int i = 0; i < pos; i++) {
+			actual = actual.getSiguiente();	
+		}
+		return actual;
+	}
+	
+	public void ordenarPorPoder() {
+		Tecnica actual = tecnicaBase, temp = null;
+		int j;
+		for (int i = 1; i < contarElementos(); i++) {
+			temp = retornarIndice(i);
+			j = i - 1;
+			while ((retornarIndice(j).getFactorDeInfluencia()>temp.getFactorDeInfluencia()) && (j >= 0)) {
+				retornarIndice(j).setSiguiente(retornarIndice(j+1));
+				j--;
+			}
+			retornarIndice(j+1).setSiguiente(temp);
+		}
 	}
 
 	

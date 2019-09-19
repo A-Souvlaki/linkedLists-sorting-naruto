@@ -1,6 +1,6 @@
 package model;
 
-public class Tecnica{
+public class Tecnica implements Comparable<Tecnica>{
 	private String nombreTecnica;
 	private double factorDeInfluencia;
 	private Tecnica siguiente;
@@ -48,4 +48,16 @@ public class Tecnica{
 	public int compararPorNombre(String nombre) {
 		return nombreTecnica.compareTo(nombre);
 	}
+
+	@Override
+	public int compareTo(Tecnica arg0) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	
+	
+
+	
+	
 }

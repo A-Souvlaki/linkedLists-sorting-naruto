@@ -5,13 +5,24 @@ public class Pruebas {
 	
 	public static void main(String[] args) {
 		Clan a = new Clan("Prueba");
-		a.ingresarPersonajeAlFinal("Jhon Jairo", "b","b", 5000, null);
-		a.ingresarPersonajeAlFinal("Cristian", "c","c", 5000, null); 
-		a.ingresarPersonajeAlFinal("Kilo", "d","d", 5000, null);
-		System.out.println(a.pintar());
-		a.modificarNombrePersonaje("Jhon Jairo","Manuel");
-		System.out.println(a.pintar());
+		a.ingresarPersonajeAlFinal("Kirito Uzumaki", "d","d", 3, null);
+		a.ingresarPersonajeAlFinal("Kazuma God", "d","d", 5, null);
+		a.ingresarPersonajeAlFinal("Dio Jotaro", "b","b", 4, null);	
+		a.ingresarPersonajeAlFinal("Ganta Saiyayin", "b","b", 2, null);
 		
+		System.out.println(a.pintar());
+		a.ordenarByPower();
+		System.out.println(a.pintar());
+		System.out.println(a.contarElementos());
+	
+		
+		
+		
+		
+
+		
+	
+
 		
 	
 		
