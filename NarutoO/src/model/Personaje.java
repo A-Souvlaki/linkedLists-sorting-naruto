@@ -68,7 +68,7 @@ public class Personaje implements Comparator<Personaje>{
 				+ "| poder: " + String.format("%1$-8s", poder) + "| tecnicaBase: " + String.format("%1$-8s", tecnicaBase) + "]";
 	}
 
-	public void insertarAlFinal(String nombreTecnica, double factorDeInfluencia) {
+	public void insertarAlFinal(String nombreTecnica, int factorDeInfluencia) {
 		Tecnica tecnica = new Tecnica(nombreTecnica, factorDeInfluencia);
 		if(tecnicaBase == null) {
 			tecnicaBase = tecnica;
@@ -143,7 +143,7 @@ public class Personaje implements Comparator<Personaje>{
 
 	public int contarElementos() {
 		int contador = 0;
-		Tecnica actual = tecnicaBase ;
+		Tecnica actual = tecnicaBase;
 		while (actual != null) {
 			contador++;
 			actual = actual.getSiguiente();
@@ -153,23 +153,48 @@ public class Personaje implements Comparator<Personaje>{
 	
 	public Tecnica retornarIndice(int pos) {
 		Tecnica actual = tecnicaBase;
-		for (int i = 0; i < pos; i++) {
-			actual = actual.getSiguiente();	
+		if (pos == 0) {
+			actual = tecnicaBase;
+		} else {
+			for (int i = 0; i < pos; i++) {
+				actual = actual.getSiguiente();
+			}
 		}
 		return actual;
 	}
 	
 	public void ordenarPorPoder() {
-		Tecnica actual = tecnicaBase, temp = null;
-		int j;
+		Tecnica clave = null;
+		int va = 0;
 		for (int i = 1; i < contarElementos(); i++) {
-			temp = retornarIndice(i);
-			j = i - 1;
-			while ((retornarIndice(j).getFactorDeInfluencia()>temp.getFactorDeInfluencia()) && (j >= 0)) {
-				retornarIndice(j).setSiguiente(retornarIndice(j+1));
-				j--;
+			clave = retornarIndice(i);
+			va = i-1;
+			while (va > -1 && retornarIndice(va).getFactorDeInfluencia()>clave.getFactorDeInfluencia()) {
+				Tecnica aux1= retornarIndice(va);
+				Tecnica aux2 = clave;
+				
+				if(aux1 == tecnicaBase) {
+					Tecnica temp = aux1;
+					Tecnica siguiente = aux2.getSiguiente();
+					tecnicaBase = aux2;
+					aux2.setSiguiente(temp);
+					temp.setSiguiente(siguiente);
+				} else {
+					System.out.println("AQUI ENTRE");
+					Tecnica temp = aux1;
+					Tecnica siguiente = aux2.getSiguiente();
+					Tecnica anterior = retornarIndice(va-1);
+					anterior.setSiguiente(aux2);
+					aux2.setSiguiente(temp);
+					temp.setSiguiente(siguiente);
+				} 
+				va--;
+				System.out.println(pintar());
 			}
-			retornarIndice(j+1).setSiguiente(temp);
+			Tecnica centinela = retornarIndice(va+1);
+			centinela = clave;
+			
+			
 		}
 	}
 

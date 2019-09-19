@@ -14,10 +14,17 @@ public class Pruebas {
 		a.ingresarPersonajeAlFinal("Zoro sin piece ", "No estoy llorando, lo juro","19/09/2019", 6666, null);
 		a.ingresarPersonajeAlFinal("Jhon Wick      ", "¡Que Dios se apiade de los que enfrenten a Jhon papasito Wick","19/09/2019", 8002, null);
 		
-		System.out.println(a.pintar());
-		a.ordenarPorPoderBubbleSort();;
 		
-		System.out.println(a.contarElementos());
+		Personaje b = new Personaje("Dio Jotaro     ", "Is this a motherfucker jojo's reference!?","19/09/2019", 4500, null);
+		b.insertarAlFinal("Kim Crimson", 3);
+		b.insertarAlFinal("Espejo del crepusculo", 5);
+		b.insertarAlFinal("Hamon", 2);
+		b.insertarAlFinal("Hombres del pilar", 6);
+		b.insertarAlFinal("Stand", 4);
+		System.out.println(b.pintar());
+		b.ordenarPorPoder();
+		System.out.println(b.pintar());
+		
 	
 		
 		
