@@ -16,7 +16,7 @@ public class Clan {
 		return nombreClan;
 	}
 
-	public void ingresarPersonajeAlFinal(String nombre, String personalidad, String fechaCreacion, double poder,
+	public void ingresarPersonajeAlFinal(String nombre, String personalidad, String fechaCreacion, int poder,
 			Tecnica tecnicaBase) {
 		Personaje personaje = new Personaje(nombre, personalidad, fechaCreacion, poder, tecnicaBase);
 
@@ -31,9 +31,8 @@ public class Clan {
 			ultimo = personaje;
 		}
 	}
-	
 
-	public void ingresarPersonajeAlInicio(String nombre, String personalidad, String fechaCreacion, double poder,
+	public void ingresarPersonajeAlInicio(String nombre, String personalidad, String fechaCreacion, int poder,
 			Tecnica tecnicaBase) {
 		Personaje personaje = new Personaje(fechaCreacion, fechaCreacion, fechaCreacion, poder, tecnicaBase);
 		if (primero != null) {
@@ -45,19 +44,8 @@ public class Clan {
 		}
 	}
 	
-	public void ingresarPersonajeAlInicio(Personaje personaje) {
-		
-		if (primero != null) {
-			Personaje temp = primero.getSiguiente();
-			primero = personaje;
-			temp.setAnterior(personaje);
-			personaje.setSiguiente(temp);
-			personaje.setAnterior(null);
-		}
-	}
-
 	public void ingresarPersonajeDespuesDe(String nombreAnterior, String nombre, String personalidad,
-			String fechaCreacion, double poder, Tecnica tecnicaBase) {
+			String fechaCreacion, int poder, Tecnica tecnicaBase) {
 		Personaje actual = primero, anterior = null, siguiente = null,
 				porInsertar = new Personaje(nombre, personalidad, fechaCreacion, poder, tecnicaBase);
 		boolean cerrar = false;
@@ -76,9 +64,9 @@ public class Clan {
 	}
 
 	public void ingresarPersonajeAntesDe(String nombreAnterior, String nombre, String personalidad,
-			String fechaCreacion, double poder, Tecnica tecnicaBase) {
+			String fechaCreacion, int poder, Tecnica tecnicaBase) {
 		Personaje actual = primero, anterior = null, siguiente = null,
-				porInsertar = new Personaje(nombre, personalidad, fechaCreacion, poder, tecnicaBase);
+				porInsertar = new Personaje(nombre, personalidad, fechaCreacion, poder, tecnicaBase); 
 		boolean cerrar = false;
 		while (actual != null && !cerrar) {
 			if (actual.getNombre().equals(nombreAnterior)) {
@@ -108,43 +96,17 @@ public class Clan {
 		anterior.setSiguiente(siguiente);
 		siguiente.setAnterior(anterior);
 	}
-	
-	public void modificarNombrePersonaje(String nombreActual,String nombreActualizar) {
+
+	public void modificarNombrePersonaje(String nombreActual, String nombreActualizar) {
 		Personaje actual = primero;
 		boolean cerrar = false;
 		while (actual != null && !cerrar) {
-			if(actual.getNombre().equals(nombreActual)) {
+			if (actual.getNombre().equals(nombreActual)) {
 				actual.setNombre(nombreActualizar);
 				cerrar = true;
 			}
 			actual = actual.getSiguiente();
 		}
-	}
-	
-	public void modificarPersonaje(String nombreActual,Personaje nuevo) {
-		Personaje actual = primero,anterior = null,siguiente = null;
-		boolean cerrar = false;
-		while (actual != null && !cerrar) {
-			if(actual.getNombre().equals(nombreActual)) {
-				anterior = actual.getAnterior();
-				siguiente = actual.getSiguiente();
-				cerrar = true;
-			}
-			actual = actual.getSiguiente();
-		}
-		if(nombreActual.equals(primero.getNombre())) {
-			ingresarPersonajeAlInicio(nuevo);
-		} else if (siguiente == null) {
-			anterior.setSiguiente(nuevo);
-			nuevo.setAnterior(anterior);
-			nuevo.setSiguiente(null);
-		} else {
-			anterior.setSiguiente(nuevo);
-			nuevo.setAnterior(anterior);
-			siguiente.setAnterior(nuevo);
-			nuevo.setSiguiente(siguiente);
-		}
-	
 	}
 
 	public int contarElementos() {
@@ -156,60 +118,64 @@ public class Clan {
 		}
 		return contador;
 	}
-	
+
 	public Personaje retornarIndice(int pos) {
 		Personaje actual = primero;
-		if(pos == 0) {
+		if (pos == 0) {
 			actual = primero;
-		}else {
+		} else {
 			for (int i = 0; i < pos; i++) {
-				actual = actual.getSiguiente();	
+				actual = actual.getSiguiente();
 			}
 		}
-		
 		return actual;
 	}
-	
-	public void ordenarByPower() {
+
+	public void ordenarPorPoderBubbleSort() {
 		Personaje actual = primero;
-		
+
 		while (actual != null) {
-			
+
 			int va = 0;
-			while (va < contarElementos()-1) {
-				if (retornarIndice(va).getPoder() > retornarIndice(va+1).getPoder()) {
+			while (va < contarElementos() - 1) {
+				if (retornarIndice(va).compare(retornarIndice(va),retornarIndice(va+1))>0) {
 					Personaje aux1 = retornarIndice(va);
-					Personaje aux2 = retornarIndice(va+1);
+					Personaje aux2 = retornarIndice(va + 1);
 					//
 					if (aux1.getAnterior() == null) {
 						
 						Personaje temp = aux1;
-						primero = aux2;
-						temp.setAnterior(aux2);
-						temp.setSiguiente(aux2.getSiguiente());
-						aux2.setSiguiente(temp);
-						aux1.setAnterior(null);	
-						
-					} else if (aux2.getSiguiente() == null) {
-						
-						Personaje temp = aux1;
-						Personaje anterior = aux1.getAnterior();
-						temp.setSiguiente(aux2.getSiguiente());
-						temp.setAnterior(aux2);
-						anterior.setSiguiente(aux2);
-						aux2.setAnterior(anterior);
-						aux2.setSiguiente(temp);
-						
-					} else {
-						
-						Personaje temp = aux1;
 						Personaje anterior = aux1.getAnterior();
 						Personaje next = aux2.getSiguiente();
+						primero = aux2;
 						temp.setAnterior(aux2);
 						temp.setSiguiente(next);
+						next.setAnterior(temp);
+						aux2.setSiguiente(temp);
+						aux2.setAnterior(anterior);
+
+					} else if (aux2.getSiguiente() == null) {
+
+						Personaje temp = aux1;
+						Personaje anterior = aux1.getAnterior();
+						temp.setSiguiente(aux2.getSiguiente());
+						temp.setAnterior(aux2);
 						anterior.setSiguiente(aux2);
 						aux2.setAnterior(anterior);
 						aux2.setSiguiente(temp);
+
+					}else if (aux1.getAnterior() != null & aux2.getSiguiente() != null) {
+						
+						Personaje temp1 = aux1;
+						Personaje temp2 = aux2;
+						Personaje previous = aux1.getAnterior();
+						Personaje next = aux2.getSiguiente();
+						temp2.setAnterior(previous);
+						previous.setSiguiente(temp2);
+						temp2.setSiguiente(temp1);
+						temp1.setAnterior(temp2);
+						temp1.setSiguiente(next);
+						next.setAnterior(temp1);
 					}
 					//
 				}
@@ -218,8 +184,6 @@ public class Clan {
 			actual = actual.getSiguiente();
 		}
 	}
-
-
 
 	public String buscarSecuencialPorNombre(String nombre) {
 		Personaje actual = primero;

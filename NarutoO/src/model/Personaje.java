@@ -2,17 +2,17 @@ package model;
 
 import java.util.Comparator;
 
-public class Personaje implements Comparable<Personaje>{
+public class Personaje implements Comparator<Personaje>{
 
 	private String nombre;
 	private String personalidad;
 	private String fechaCreacion;
-	private double poder;
+	private int poder;
 	private Tecnica tecnicaBase;
 	private Personaje siguiente;
 	private Personaje anterior;
 
-	public Personaje(String nombre, String personalidad, String fechaCreacion, double poder, Tecnica tecnicaBase) {
+	public Personaje(String nombre, String personalidad, String fechaCreacion, int poder, Tecnica tecnicaBase) {
 		this.nombre = nombre;
 		this.personalidad = personalidad;
 		this.fechaCreacion = fechaCreacion;
@@ -34,7 +34,7 @@ public class Personaje implements Comparable<Personaje>{
 		return fechaCreacion;
 	}
 
-	public double getPoder() {
+	public int getPoder() {
 		return poder;
 	}
 
@@ -64,8 +64,8 @@ public class Personaje implements Comparable<Personaje>{
 
 	@Override
 	public String toString() {
-		return "Personaje [nombre=" + String.format("%1$-13s",nombre) + " personalidad=" + String.format("%1$-13s",personalidad) + ", fechaCreacion=" + String.format("%1$-13s", fechaCreacion)
-				+ ", poder=" + String.format("%1$-13s", poder) + ", tecnicaBase=" + String.format("%1$-13s", tecnicaBase) + "]";
+		return "Personaje [nombre: " + String.format("%1$-13s",nombre) + "| personalidad: " + String.format("%1$-70s",personalidad) + "| fechaCreacion: " + String.format("%1$-8s", fechaCreacion)
+				+ "| poder: " + String.format("%1$-8s", poder) + "| tecnicaBase: " + String.format("%1$-8s", tecnicaBase) + "]";
 	}
 
 	public void insertarAlFinal(String nombreTecnica, double factorDeInfluencia) {
@@ -81,7 +81,7 @@ public class Personaje implements Comparable<Personaje>{
 		}
 	}
 	
-	public void insertarAlInicio(String nombreTecnica, double factorDeInfluencia) {
+	public void insertarAlInicio(String nombreTecnica, int factorDeInfluencia) {
 		Tecnica tecnica = new Tecnica(nombreTecnica, factorDeInfluencia);
 		if(tecnicaBase == null) {
 			tecnicaBase = tecnica;
@@ -92,7 +92,7 @@ public class Personaje implements Comparable<Personaje>{
 		}
 	}
 	
-	public void insertarDespuesDe(String nombreAnterior,String nombreTecnica, double factorDeInfluencia) {
+	public void insertarDespuesDe(String nombreAnterior,String nombreTecnica, int factorDeInfluencia) {
 		Tecnica actual = tecnicaBase,tecnica = new Tecnica(nombreTecnica, factorDeInfluencia), siguiente = null;
 		while (actual.getSiguiente() != null) {
 			if(actual.getSiguiente().getNombreTecnica().equals(nombreAnterior)) {
@@ -105,7 +105,7 @@ public class Personaje implements Comparable<Personaje>{
 		tecnica.setSiguiente(temp);
 	}
 	
-	public void insertarAntesDe(String nombreAnterior,String nombreTecnica, double factorDeInfluencia) {
+	public void insertarAntesDe(String nombreAnterior,String nombreTecnica, int factorDeInfluencia) {
 		Tecnica actual = tecnicaBase,tecnica = new Tecnica(nombreTecnica, factorDeInfluencia), anterior = null;
 		while (actual.getSiguiente() != null) {
 			if(actual.getSiguiente().getNombreTecnica().equals(nombreAnterior)) {
@@ -141,11 +141,6 @@ public class Personaje implements Comparable<Personaje>{
 		return pintar;
 	}
 
-	@Override
-	public int compareTo(Personaje o) {
-		return nombre.compareTo(o.getNombre());
-	}
-	
 	public int contarElementos() {
 		int contador = 0;
 		Tecnica actual = tecnicaBase ;
@@ -176,6 +171,11 @@ public class Personaje implements Comparable<Personaje>{
 			}
 			retornarIndice(j+1).setSiguiente(temp);
 		}
+	}
+
+	@Override
+	public int compare(Personaje o1, Personaje o2) {
+		return o1.getNombre().compareTo(o2.getNombre());
 	}
 
 	
