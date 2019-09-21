@@ -47,6 +47,22 @@ public class Konoha {
 		}
 	}
 	
+	public void ordenarPorNombreSeleccionSort() {
+		for (int i = 0; i < clanes.size()-1; i++) {
+			Clan menor = clanes.get(i);
+			int cual = i;
+			for (int j = i+1; j < clanes.size(); j++) {
+				if (clanes.get(j).compareTo(menor)<0) {
+					menor = clanes.get(j);
+					cual = j;
+				}
+			}
+			
+			Clan temp = clanes.get(i);
+			clanes.set(i, menor);
+			clanes.set(cual, temp);
+		}
+	}
 	
 	
 }

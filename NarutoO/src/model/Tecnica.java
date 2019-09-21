@@ -1,6 +1,6 @@
 package model;
 
-public class Tecnica{
+public class Tecnica implements Comparable<Tecnica>{
 	private String nombreTecnica;
 	private int factorDeInfluencia;
 	private Tecnica siguiente;
@@ -44,10 +44,13 @@ public class Tecnica{
 	public String toString() {
 		return "Tecnica [nombreTecnica: " + nombreTecnica + ", factorDeInfluencia: " + factorDeInfluencia + "]";
 	}
-	
-	public int compararPorNombre(String nombre) {
-		return nombreTecnica.compareTo(nombre);
+
+	@Override
+	public int compareTo(Tecnica o) {
+		return nombreTecnica.compareTo(o.getNombreTecnica());
 	}
+	
+	
 
 	
 

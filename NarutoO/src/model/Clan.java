@@ -1,6 +1,6 @@
 package model;
 
-public class Clan {
+public class Clan implements Comparable<Clan> {
 
 	private String nombreClan;
 	private Personaje primero;
@@ -43,7 +43,7 @@ public class Clan {
 			personaje.setAnterior(null);
 		}
 	}
-	
+
 	public void ingresarPersonajeDespuesDe(String nombreAnterior, String nombre, String personalidad,
 			String fechaCreacion, int poder, Tecnica tecnicaBase) {
 		Personaje actual = primero, anterior = null, siguiente = null,
@@ -66,7 +66,7 @@ public class Clan {
 	public void ingresarPersonajeAntesDe(String nombreAnterior, String nombre, String personalidad,
 			String fechaCreacion, int poder, Tecnica tecnicaBase) {
 		Personaje actual = primero, anterior = null, siguiente = null,
-				porInsertar = new Personaje(nombre, personalidad, fechaCreacion, poder, tecnicaBase); 
+				porInsertar = new Personaje(nombre, personalidad, fechaCreacion, poder, tecnicaBase);
 		boolean cerrar = false;
 		while (actual != null && !cerrar) {
 			if (actual.getNombre().equals(nombreAnterior)) {
@@ -131,19 +131,19 @@ public class Clan {
 		return actual;
 	}
 
-	public void ordenarPorPoderBubbleSort() {
+	public void ordenarPorNombreBubbleSort() {
 		Personaje actual = primero;
 
 		while (actual != null) {
 
 			int va = 0;
 			while (va < contarElementos() - 1) {
-				if (retornarIndice(va).compare(retornarIndice(va),retornarIndice(va+1))>0) {
+				if (retornarIndice(va).compare(retornarIndice(va), retornarIndice(va + 1)) > 0) {
 					Personaje aux1 = retornarIndice(va);
 					Personaje aux2 = retornarIndice(va + 1);
 					//
 					if (aux1.getAnterior() == null) {
-						
+
 						Personaje temp = aux1;
 						Personaje anterior = aux1.getAnterior();
 						Personaje next = aux2.getSiguiente();
@@ -164,8 +164,8 @@ public class Clan {
 						aux2.setAnterior(anterior);
 						aux2.setSiguiente(temp);
 
-					}else if (aux1.getAnterior() != null & aux2.getSiguiente() != null) {
-						
+					} else if (aux1.getAnterior() != null & aux2.getSiguiente() != null) {
+
 						Personaje temp1 = aux1;
 						Personaje temp2 = aux2;
 						Personaje previous = aux1.getAnterior();
@@ -198,6 +198,8 @@ public class Clan {
 		}
 		return msj;
 	}
+	
+	
 
 	public String pintar() {
 		String pintar = "";
@@ -207,6 +209,11 @@ public class Clan {
 			actual = actual.getSiguiente();
 		}
 		return pintar;
+	}
+
+	@Override
+	public int compareTo(Clan o) {
+		return nombreClan.compareTo(o.getNombreClan());
 	}
 
 }
