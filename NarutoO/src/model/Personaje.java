@@ -1,8 +1,9 @@
 package model;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
-public class Personaje implements Comparator<Personaje> , Comparable<Personaje>{
+public class Personaje implements Comparator<Personaje>, Comparable<Personaje>, Serializable {
 
 	private String nombre;
 	private String personalidad;
@@ -62,6 +63,18 @@ public class Personaje implements Comparator<Personaje> , Comparable<Personaje>{
 		this.nombre = nombre;
 	}
 
+	public boolean repetido(String nombre) {
+		boolean repetido = false;
+		boolean cerrar = true;
+		for (int i = 0; i < contarElementos() && cerrar; i++) {
+			if (retornarIndice(i).getNombreTecnica().equals(nombre)) {
+				repetido = true;
+				cerrar = false;
+			}
+		}
+		return repetido;
+	}
+
 	@Override
 	public String toString() {
 		return "Personaje [nombre: " + String.format("%1$-13s", nombre) + "| personalidad: "
@@ -70,27 +83,49 @@ public class Personaje implements Comparator<Personaje> , Comparable<Personaje>{
 				+ String.format("%1$-8s", tecnicaBase) + "]";
 	}
 
-	public void insertarAlFinal(String nombreTecnica, int factorDeInfluencia) {
+	public void insertarAlFinal(String nombreTecnica, int factorDeInfluencia) throws ElementoExisteExcepcion {
 		Tecnica tecnica = new Tecnica(nombreTecnica, factorDeInfluencia);
-		if (tecnicaBase == null) {
-			tecnicaBase = tecnica;
+		if (repetido(nombreTecnica)) {
+			throw new ElementoExisteExcepcion("YA existe una tecnica con este nombre");
 		} else {
-			Tecnica actual = tecnicaBase;
-			while (actual.getSiguiente() != null) {
-				actual = actual.getSiguiente();
+			if (tecnicaBase == null) {
+				tecnicaBase = tecnica;
+			} else {
+				Tecnica actual = tecnicaBase;
+				while (actual.getSiguiente() != null) {
+					actual = actual.getSiguiente();
+				}
+				actual.setSiguiente(tecnica);
 			}
-			actual.setSiguiente(tecnica);
 		}
+
 	}
 
-	public void insertarAlInicio(String nombreTecnica, int factorDeInfluencia) {
+	public void insertarAlInicio(String nombreTecnica, int factorDeInfluencia) throws ElementoExisteExcepcion {
 		Tecnica tecnica = new Tecnica(nombreTecnica, factorDeInfluencia);
+		if (repetido(nombreTecnica)) {
+			throw new ElementoExisteExcepcion("YA existe una tecnica con este nombre");
+		} else {
+			if (tecnicaBase == null) {
+				tecnicaBase = tecnica;
+			} else {
+				tecnica.setSiguiente(tecnicaBase);
+				tecnicaBase = tecnica;
+			}
+		}
+
+	}
+
+	public void insertarAlInicio(Tecnica t) {
+		Tecnica tecnica = t;
+
 		if (tecnicaBase == null) {
 			tecnicaBase = tecnica;
 		} else {
 			tecnica.setSiguiente(tecnicaBase);
 			tecnicaBase = tecnica;
 		}
+
 	}
 
 	public void insertarDespuesDe(String nombreAnterior, String nombreTecnica, int factorDeInfluencia) {
@@ -121,14 +156,20 @@ public class Personaje implements Comparator<Personaje> , Comparable<Personaje>{
 
 	public void eliminarTecnica(String nombreTecnica) {
 		Tecnica actual = tecnicaBase, siguiente = null, anterior = null;
-		while (actual.getSiguiente() != null) {
-			if (actual.getSiguiente().getNombreTecnica().equals(nombreTecnica)) {
-				anterior = actual;
-				siguiente = actual.getSiguiente();
+		if (actual.getNombreTecnica().equals(nombreTecnica)) {
+			siguiente = tecnicaBase.getSiguiente();
+			tecnicaBase = siguiente;
+		} else {
+			while (actual.getSiguiente() != null) {
+				if (actual.getSiguiente().getNombreTecnica().equals(nombreTecnica)) {
+					anterior = actual;
+					siguiente = actual.getSiguiente();
+				}
+				actual = actual.getSiguiente();
 			}
-			actual = actual.getSiguiente();
+			anterior.setSiguiente(siguiente.getSiguiente());
 		}
-		anterior.setSiguiente(siguiente.getSiguiente());
+
 	}
 
 	public String pintar() {
@@ -163,8 +204,6 @@ public class Personaje implements Comparator<Personaje> , Comparable<Personaje>{
 		return actual;
 	}
 
-	
-
 	public void ordenarPorPoderInsertionSort() {
 		Tecnica clave = null;
 		int va = 0;
@@ -197,6 +236,61 @@ public class Personaje implements Comparator<Personaje> , Comparable<Personaje>{
 		}
 	}
 
+	public void modificarPorPosicion(int pos, Tecnica temp) {
+		Tecnica actual = tecnicaBase;
+		if (pos == 0) {
+			Tecnica temp1 = actual;
+			tecnicaBase = temp;
+			temp.setSiguiente(temp1);
+		} else {
+			Tecnica temp2 = tecnicaBase;
+			for (int i = 0; i < pos - 1; i++) {
+				temp2 = temp2.getSiguiente();
+			}
+			Tecnica anterior = temp2;
+			temp2 = tecnicaBase;
+			for (int i = 0; i < pos + 1; i++) {
+				temp2 = temp2.getSiguiente();
+			}
+			Tecnica siguiente = temp2;
+			anterior.setSiguiente(temp);
+			temp.setSiguiente(siguiente);
+		}
+	}
+
+	public void ordenarNombresPorSelectionSort() throws ElementoExisteExcepcion {
+		Tecnica menor = null;
+		Tecnica mayor = null;
+		for (int i = 0; i < contarElementos() - 1; i++) {
+			menor = retornarIndice(i);
+			int cual = i;
+			for (int j = i + 1; j < contarElementos(); j++) {
+				mayor = retornarIndice(j);
+				if (mayor.compareTo(menor) < 0) {
+					menor = mayor;
+					cual = j;
+				}
+			}
+			Tecnica menor1 = new Tecnica(menor.getNombreTecnica(), (int) menor.getFactorDeInfluencia());
+			Tecnica menor2 = new Tecnica(retornarIndice(i).getNombreTecnica(),
+					(int) retornarIndice(i).getFactorDeInfluencia());
+			if (retornarIndice(i)!= tecnicaBase) {
+				if (retornarIndice(i) == tecnicaBase) {
+					eliminarTecnica(menor2.getNombreTecnica());
+					insertarAlInicio(menor1);
+					modificarPorPosicion(cual, menor2);
+				}else {
+					insertarAntesDe(menor1.getNombreTecnica(), menor2.getNombreTecnica(), (int) menor2.getFactorDeInfluencia());
+					eliminarTecnica(menor1.getNombreTecnica());
+					modificarPorPosicion(i, menor1);
+				}
+			}
+			
+			System.out.println(pintar());
+
+		}
+	}
+
 	@Override
 	public int compare(Personaje o1, Personaje o2) {
 		return o1.getNombre().compareTo(o2.getNombre());
@@ -206,7 +300,9 @@ public class Personaje implements Comparator<Personaje> , Comparable<Personaje>{
 	public int compareTo(Personaje o) {
 		return personalidad.compareTo(o.getPersonalidad());
 	}
-	
-	
+
+	public void setPersonalidad(String personalidad) {
+		this.personalidad = personalidad;
+	}
 
 }

@@ -1,6 +1,8 @@
 package model;
 
-public class Clan implements Comparable<Clan> {
+import java.io.Serializable;
+
+public class Clan implements Comparable<Clan>,Serializable {
 
 	private String nombreClan;
 	private Personaje primero;
@@ -15,33 +17,57 @@ public class Clan implements Comparable<Clan> {
 	public String getNombreClan() {
 		return nombreClan;
 	}
-
+	
+	@Override
+	public String toString() {
+		return "Clan [nombre del clan: " + nombreClan + "]";
+	}
+	
 	public void ingresarPersonajeAlFinal(String nombre, String personalidad, String fechaCreacion, int poder,
-			Tecnica tecnicaBase) {
+			Tecnica tecnicaBase) throws ElementoExisteExcepcion {
 		Personaje personaje = new Personaje(nombre, personalidad, fechaCreacion, poder, tecnicaBase);
-
-		if (primero == null) {
-			primero = personaje;
-			primero.setAnterior(null);
-			ultimo = primero;
+		if (repetido(nombre)) {
+			throw new ElementoExisteExcepcion("Ya existe un personaje con el nombre ingresado");
 		} else {
-			ultimo.setSiguiente(personaje);
-			personaje.setAnterior(ultimo);
-			personaje.setSiguiente(null);
-			ultimo = personaje;
+			if (primero == null) {
+				primero = personaje;
+				primero.setAnterior(null);
+				ultimo = primero;
+			} else {
+				ultimo.setSiguiente(personaje);
+				personaje.setAnterior(ultimo);
+				personaje.setSiguiente(null);
+				ultimo = personaje;
+			}
 		}
 	}
 
 	public void ingresarPersonajeAlInicio(String nombre, String personalidad, String fechaCreacion, int poder,
-			Tecnica tecnicaBase) {
+			Tecnica tecnicaBase) throws ElementoExisteExcepcion {
 		Personaje personaje = new Personaje(fechaCreacion, fechaCreacion, fechaCreacion, poder, tecnicaBase);
-		if (primero != null) {
-			Personaje temp = primero;
-			primero = personaje;
-			temp.setAnterior(personaje);
-			personaje.setSiguiente(temp);
-			personaje.setAnterior(null);
+		if (repetido(nombre)) {
+			throw new ElementoExisteExcepcion("Ya existe un personaje con el nombre ingresado");
+		} else {
+			if (primero != null) {
+				Personaje temp = primero;
+				primero = personaje;
+				temp.setAnterior(personaje);
+				personaje.setSiguiente(temp);
+				personaje.setAnterior(null);
+			}
 		}
+		
+	}
+	public boolean repetido(String nombre) {
+		boolean repetido = false;
+		boolean cerrar = true;
+		for (int i = 0; i < contarElementos() && cerrar; i++) {
+			if (retornarIndice(i).getNombre().equals(nombre)) {
+				repetido = true;
+				cerrar = false;
+			}
+		}
+		return repetido;
 	}
 
 	public void ingresarPersonajeDespuesDe(String nombreAnterior, String nombre, String personalidad,
@@ -85,16 +111,29 @@ public class Clan implements Comparable<Clan> {
 	public void eliminarPersonaje(String nombre) {
 		Personaje actual = primero, anterior = null, siguiente = null;
 		boolean cerrar = false;
-		while (actual != null && !cerrar) {
-			if (actual.getNombre().equals(nombre)) {
-				anterior = actual.getAnterior();
-				siguiente = actual.getSiguiente();
-				cerrar = true;
+		if (nombre.equals(primero.getNombre())) {
+			siguiente = primero.getSiguiente();
+			primero = primero.getSiguiente();
+			siguiente.setAnterior(null);
+
+		} else {
+			while (actual != null && !cerrar) {
+				if (actual.getNombre().equals(nombre) && actual.getSiguiente() != null) {
+					anterior = actual.getAnterior();
+					siguiente = actual.getSiguiente();
+					anterior.setSiguiente(siguiente);
+					siguiente.setAnterior(anterior);
+					cerrar = true;
+				} else if (actual.getNombre().equals(nombre) && actual.getSiguiente() == null) {
+					anterior = actual.getAnterior();
+					anterior.setSiguiente(null);
+					cerrar = true;
+				}
+				actual = actual.getSiguiente();
 			}
-			actual = actual.getSiguiente();
+
 		}
-		anterior.setSiguiente(siguiente);
-		siguiente.setAnterior(anterior);
+
 	}
 
 	public void modificarNombrePersonaje(String nombreActual, String nombreActualizar) {
@@ -103,6 +142,18 @@ public class Clan implements Comparable<Clan> {
 		while (actual != null && !cerrar) {
 			if (actual.getNombre().equals(nombreActual)) {
 				actual.setNombre(nombreActualizar);
+				cerrar = true;
+			}
+			actual = actual.getSiguiente();
+		}
+	}
+	
+	public void modificarPersonalidadPersonaje(String nombreActual, String nuevaPersonalidad) {
+		Personaje actual = primero;
+		boolean cerrar = false;
+		while (actual != null && !cerrar) {
+			if (actual.getNombre().equals(nombreActual)) {
+				actual.setPersonalidad(nuevaPersonalidad);;
 				cerrar = true;
 			}
 			actual = actual.getSiguiente();
@@ -184,6 +235,23 @@ public class Clan implements Comparable<Clan> {
 			actual = actual.getSiguiente();
 		}
 	}
+	
+	public Personaje retornarObjeto(String nombre) {
+		Personaje personaje = null;
+		Personaje actual = primero;
+		if(primero.getNombre().equals(nombre)) {
+			personaje = primero;
+		}else {
+			while(actual!=null) {
+				if(actual.getNombre().equals(nombre)) {
+					personaje = actual;
+				}
+			}
+		}
+		return personaje;
+	}
+
+
 
 	public String buscarSecuencialPorNombre(String nombre) {
 		Personaje actual = primero;
@@ -198,8 +266,6 @@ public class Clan implements Comparable<Clan> {
 		}
 		return msj;
 	}
-	
-	
 
 	public String pintar() {
 		String pintar = "";

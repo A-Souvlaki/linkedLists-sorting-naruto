@@ -1,6 +1,8 @@
 package model;
 
-public class Tecnica implements Comparable<Tecnica>{
+import java.io.Serializable;
+
+public class Tecnica implements Comparable<Tecnica>,Serializable{
 	private String nombreTecnica;
 	private int factorDeInfluencia;
 	private Tecnica siguiente;
