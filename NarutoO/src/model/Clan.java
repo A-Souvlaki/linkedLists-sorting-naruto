@@ -44,7 +44,7 @@ public class Clan implements Comparable<Clan>,Serializable {
 
 	public void ingresarPersonajeAlInicio(String nombre, String personalidad, String fechaCreacion, int poder,
 			Tecnica tecnicaBase) throws ElementoExisteExcepcion {
-		Personaje personaje = new Personaje(fechaCreacion, fechaCreacion, fechaCreacion, poder, tecnicaBase);
+		Personaje personaje = new Personaje(nombre, personalidad, fechaCreacion, poder, tecnicaBase);
 		if (repetido(nombre)) {
 			throw new ElementoExisteExcepcion("Ya existe un personaje con el nombre ingresado");
 		} else {
@@ -68,44 +68,6 @@ public class Clan implements Comparable<Clan>,Serializable {
 			}
 		}
 		return repetido;
-	}
-
-	public void ingresarPersonajeDespuesDe(String nombreAnterior, String nombre, String personalidad,
-			String fechaCreacion, int poder, Tecnica tecnicaBase) {
-		Personaje actual = primero, anterior = null, siguiente = null,
-				porInsertar = new Personaje(nombre, personalidad, fechaCreacion, poder, tecnicaBase);
-		boolean cerrar = false;
-		while (actual != null && !cerrar) {
-			if (actual.getNombre().equals(nombreAnterior)) {
-				siguiente = actual.getSiguiente();
-				anterior = actual;
-				cerrar = true;
-			}
-			actual = actual.getSiguiente();
-		}
-		anterior.setSiguiente(porInsertar);
-		siguiente.setAnterior(porInsertar);
-		porInsertar.setSiguiente(siguiente);
-		porInsertar.setAnterior(anterior);
-	}
-
-	public void ingresarPersonajeAntesDe(String nombreAnterior, String nombre, String personalidad,
-			String fechaCreacion, int poder, Tecnica tecnicaBase) {
-		Personaje actual = primero, anterior = null, siguiente = null,
-				porInsertar = new Personaje(nombre, personalidad, fechaCreacion, poder, tecnicaBase);
-		boolean cerrar = false;
-		while (actual != null && !cerrar) {
-			if (actual.getNombre().equals(nombreAnterior)) {
-				siguiente = actual;
-				anterior = actual.getAnterior();
-				cerrar = true;
-			}
-			actual = actual.getSiguiente();
-		}
-		anterior.setSiguiente(porInsertar);
-		siguiente.setAnterior(porInsertar);
-		porInsertar.setSiguiente(siguiente);
-		porInsertar.setAnterior(anterior);
 	}
 
 	public void eliminarPersonaje(String nombre) {
@@ -251,8 +213,6 @@ public class Clan implements Comparable<Clan>,Serializable {
 		return personaje;
 	}
 
-
-
 	public String buscarSecuencialPorNombre(String nombre) {
 		Personaje actual = primero;
 		String msj = "";
@@ -263,6 +223,10 @@ public class Clan implements Comparable<Clan>,Serializable {
 				cerrar = true;
 			}
 			actual = actual.getSiguiente();
+		}
+		
+		if (msj.equals("")) {
+			msj = "No se encontro o no existe el personaje buscado";
 		}
 		return msj;
 	}

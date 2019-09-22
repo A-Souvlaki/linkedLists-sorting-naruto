@@ -124,7 +124,7 @@ public class Konoha implements Serializable {
 				msj += clanes.get(i);
 			}
 		}
-		if (msj.equals(" ")) {
+		if (msj.equals("")) {
 			msj += "No existe ningun clan con el nombre ingresado";
 		}
 		return msj;

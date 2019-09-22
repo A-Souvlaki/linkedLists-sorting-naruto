@@ -116,6 +116,36 @@ public class Personaje implements Comparator<Personaje>, Comparable<Personaje>, 
 
 	}
 
+	public void modificarNombre(String nombreActual, String nombreActualizar) throws ElementoExisteExcepcion {
+		if (repetido(nombreActualizar) == false) {
+			throw new ElementoExisteExcepcion("YA existe una tecnica con este nombre");
+		} else {
+			Tecnica actual = tecnicaBase;
+			boolean cerrar = false;
+			while (actual != null && !cerrar) {
+				if (actual.getNombreTecnica().equals(nombreActual)) {
+					actual.setNombreTecnica(nombreActualizar);
+					cerrar = true;
+				}
+				actual = actual.getSiguiente();
+			}
+		}
+	}
+
+	public void modificarFactor(String nombreActual, int factor) {
+
+		Tecnica actual = tecnicaBase;
+		boolean cerrar = false;
+		while (actual != null && !cerrar) {
+			if (actual.getNombreTecnica().equals(nombreActual)) {
+				actual.setFactorDeInfluencia(factor);;
+				cerrar = true;
+			}
+			actual = actual.getSiguiente();
+		}
+
+	}
+
 	public void insertarAlInicio(Tecnica t) {
 		Tecnica tecnica = t;
 
@@ -274,21 +304,37 @@ public class Personaje implements Comparator<Personaje>, Comparable<Personaje>, 
 			Tecnica menor1 = new Tecnica(menor.getNombreTecnica(), (int) menor.getFactorDeInfluencia());
 			Tecnica menor2 = new Tecnica(retornarIndice(i).getNombreTecnica(),
 					(int) retornarIndice(i).getFactorDeInfluencia());
-			if (retornarIndice(i)!= tecnicaBase) {
+			if (retornarIndice(i) != tecnicaBase) {
 				if (retornarIndice(i) == tecnicaBase) {
 					eliminarTecnica(menor2.getNombreTecnica());
 					insertarAlInicio(menor1);
 					modificarPorPosicion(cual, menor2);
-				}else {
-					insertarAntesDe(menor1.getNombreTecnica(), menor2.getNombreTecnica(), (int) menor2.getFactorDeInfluencia());
+				} else {
+					insertarAntesDe(menor1.getNombreTecnica(), menor2.getNombreTecnica(),
+							(int) menor2.getFactorDeInfluencia());
 					eliminarTecnica(menor1.getNombreTecnica());
 					modificarPorPosicion(i, menor1);
 				}
 			}
-			
-			System.out.println(pintar());
-
 		}
+	}
+	
+	public String buscarSecuencialPorNombre(String nombre) {
+		String msj = "";
+		boolean cerrar = false;
+		Tecnica actual = tecnicaBase;
+		while (actual != null && !cerrar) {
+			if (actual.getNombreTecnica().equals(nombre)) {
+				msj += actual;
+				cerrar = true;
+			}
+			actual = actual.getSiguiente();
+		}
+		
+		if (msj.equals("")) {
+			msj = "No se encontro ningun elemento con el nombre indicado";
+		}
+		return msj;
 	}
 
 	@Override
