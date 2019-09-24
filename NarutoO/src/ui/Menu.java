@@ -10,6 +10,9 @@ package ui;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
+
+import javax.naming.InitialContext;
+
 import java.util.Date;
 
 import java.io.*;
@@ -52,15 +55,15 @@ public class Menu {
 				break;
 			case 4:
 				eliminarClan();
-				aldeas.saveClanes();
+				
 				break;
 			case 5:
 				eliminarPersonaje();
-				aldeas.saveClanes();
+				
 				break;
 			case 6:
 				eliminarTecnica();
-				aldeas.saveClanes();
+				
 				break;
 			case 7:
 				mostrarClanesOrdenados();
@@ -238,6 +241,7 @@ public class Menu {
 		String nombreClan = reader.nextLine();
 
 		aldeas.eliminarClan(nombreClan);
+		aldeas.saveClanes();
 		System.out.println("Verifique en su lista de clanes");
 	}
 
@@ -249,6 +253,7 @@ public class Menu {
 		String nombre = reader.nextLine();
 		try {
 			aldeas.retornarObjetoClan(nombreClan).eliminarPersonaje(nombre);
+			aldeas.saveClanes();
 			System.out.println("Verifique en su lista de personajes");
 		} catch (NullPointerException e) {
 			System.out.println("Cada vez que intentas ingresar un clan que no existe, un gatito muere :(");
@@ -267,6 +272,7 @@ public class Menu {
 		String nombreTecnica = reader.nextLine();
 		try {
 			aldeas.retornarObjetoClan(nombreClan).retornarObjeto(nombre).eliminarTecnica(nombreTecnica);
+			aldeas.saveClanes();
 			System.out.println("Verifique en su lista de tecnicas");
 		} catch (NullPointerException e) {
 			System.out.println("Cada vez que intentas ingresar un personaje que no existe, un gatito muere :(");
@@ -282,6 +288,7 @@ public class Menu {
 		System.out.println("Ingrese el nombre del clan: ");
 		String nombreClan = reader.nextLine();
 		try {
+			System.out.println(aldeas.retornarObjetoClan(nombreClan).pintar());
 			long t1 = System.nanoTime();
 			aldeas.retornarObjetoClan(nombreClan).ordenarPorNombreBubbleSort();
 			long t2 = System.nanoTime();
@@ -480,6 +487,7 @@ public class Menu {
 		
 		
 	}
+	
 
 	public static void main(String[] args) {
 

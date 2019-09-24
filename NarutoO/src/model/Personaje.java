@@ -77,10 +77,10 @@ public class Personaje implements Comparator<Personaje>, Comparable<Personaje>, 
 
 	@Override
 	public String toString() {
-		return "Personaje [nombre: " + String.format("%1$-13s", nombre) + "| personalidad: "
-				+ String.format("%1$-70s", personalidad) + "| fechaCreacion: " + String.format("%1$-8s", fechaCreacion)
-				+ "| poder: " + String.format("%1$-8s", poder) + "| tecnicaBase: "
-				+ String.format("%1$-8s", tecnicaBase) + "]";
+		return "Personaje [nombre: " + String.format("%1$-20s", nombre) + "| personalidad: "
+				+ String.format("%1$-33s", personalidad) + "| fechaCreacion: " + String.format("%1$-20s", fechaCreacion)
+				+ "| poder: " + String.format("%1$-20s", poder) + "| tecnicaBase: "
+				+ String.format("%1$-20s", tecnicaBase) + "]";
 	}
 
 	public void insertarAlFinal(String nombreTecnica, int factorDeInfluencia) throws ElementoExisteExcepcion {
@@ -191,7 +191,7 @@ public class Personaje implements Comparator<Personaje>, Comparable<Personaje>, 
 			tecnicaBase = siguiente;
 		} else {
 			while (actual.getSiguiente() != null) {
-				if (actual.getSiguiente().getNombreTecnica().equals(nombreTecnica)) {
+				if (nombre.equals(actual.getSiguiente().getNombreTecnica())) {
 					anterior = actual;
 					siguiente = actual.getSiguiente();
 				}

@@ -34,10 +34,16 @@ public class Clan implements Comparable<Clan>,Serializable {
 				primero.setAnterior(null);
 				ultimo = primero;
 			} else {
-				ultimo.setSiguiente(personaje);
-				personaje.setAnterior(ultimo);
-				personaje.setSiguiente(null);
-				ultimo = personaje;
+				Personaje actual = primero;
+				while (actual != null) {
+					if (actual.getSiguiente() == null) {
+						ultimo = personaje;
+						actual.setSiguiente(personaje);
+						personaje.setAnterior(actual);
+						personaje.setSiguiente(null);
+					}
+					actual = actual.getSiguiente();
+				}
 			}
 		}
 	}
@@ -78,19 +84,18 @@ public class Clan implements Comparable<Clan>,Serializable {
 			primero = primero.getSiguiente();
 			siguiente.setAnterior(null);
 
+		}else if(nombre.equals(ultimo.getNombre())) {
+			anterior = ultimo.getAnterior();
+			ultimo = anterior;
+			anterior.setSiguiente(null);
 		} else {
-			while (actual != null && !cerrar) {
-				if (actual.getNombre().equals(nombre) && actual.getSiguiente() != null) {
+			while (actual != null) {
+				if (nombre.equals(actual.getNombre())) {
 					anterior = actual.getAnterior();
 					siguiente = actual.getSiguiente();
 					anterior.setSiguiente(siguiente);
 					siguiente.setAnterior(anterior);
-					cerrar = true;
-				} else if (actual.getNombre().equals(nombre) && actual.getSiguiente() == null) {
-					anterior = actual.getAnterior();
-					anterior.setSiguiente(null);
-					cerrar = true;
-				}
+				} 
 				actual = actual.getSiguiente();
 			}
 

@@ -81,7 +81,7 @@ public class Konoha implements Serializable {
 	public void eliminarClan(String nombreClan) {
 		boolean detener = true;
 		for (int i = 0; i < clanes.size() && detener; i++) {
-			if (clanes.get(i).getNombreClan().equals(nombreClan)) {
+			if (nombreClan.equals(clanes.get(i).getNombreClan())) {
 				detener = false;
 				clanes.remove(i);
 			}
@@ -109,7 +109,7 @@ public class Konoha implements Serializable {
 		Clan clan = null;
 		boolean cerrar = true;
 		for (int i = 0; i < clanes.size() && cerrar; i++) {
-			if (clanes.get(i).getNombreClan().equals(nombreClan)) {
+			if (nombreClan.equals(clanes.get(i).getNombreClan())) {
 				clan = clanes.get(i);
 				cerrar = false;
 			}
