@@ -28,7 +28,7 @@ public class Menu {
 
 	public Menu() {
 		reader = new Scanner(System.in);
-		aldeas = new Konoha("./files/Serializable.dat");
+		aldeas = new Konoha("files//Serializable.dat");
 		systemOperation();
 	}
 
